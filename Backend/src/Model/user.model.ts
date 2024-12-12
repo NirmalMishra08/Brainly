@@ -1,4 +1,5 @@
 
+import { timeStamp } from "console";
 import mongoose, { model, Schema } from "mongoose";
 
 mongoose.connect("mongodb://localhost:27017/brainly")
@@ -17,6 +18,9 @@ const ContentSchema = new Schema({
   tags: [{ type: mongoose.Types.ObjectId, ref: 'Tag' }],
   type: String,
   userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
+  createdAt: { type: Date, default: Date.now },
+
+  
 })
 
 const LinkSchema = new Schema({
