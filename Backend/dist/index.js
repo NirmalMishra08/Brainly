@@ -53,7 +53,7 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
             id: existingUser._id
         }, config_1.JWT_PASSWORD);
         res.json({
-            token
+            token, success: true, email, password
         });
     }
     else {
@@ -79,9 +79,10 @@ app.post("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaiter(
 app.get("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-ignore
     const userId = req.userId;
+    console.log(userId);
     const content = yield user_model_1.ContentModel.find({
         userId: userId
-    }).populate("userId", "email");
+    }).populate("userId");
     res.json({
         content
     });
@@ -93,7 +94,7 @@ app.delete("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaite
         userId: req.userId
     });
     res.json({
-        message: "Deleted"
+        message: "Deleted "
     });
 }));
 app.post("/api/v1/brain/share", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

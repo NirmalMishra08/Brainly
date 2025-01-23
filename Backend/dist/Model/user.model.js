@@ -47,7 +47,8 @@ const ContentSchema = new mongoose_1.Schema({
     link: String,
     tags: [{ type: mongoose_1.default.Types.ObjectId, ref: 'Tag' }],
     type: String,
-    userId: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: mongoose_1.default.Types.ObjectId, ref: "User", required: true },
+    createdAt: { type: Date, default: Date.now },
 });
 const LinkSchema = new mongoose_1.Schema({
     hash: String,

@@ -1,7 +1,7 @@
 import express from "express";
 import { random } from "./utils";
 import jwt from "jsonwebtoken";
-import { ContentModel,UserModel,LinkModel } from "./Model/user.model";
+import { ContentModel, UserModel, LinkModel } from "./Model/user.model";
 import { JWT_PASSWORD } from "./config";
 import { userMiddleware } from "./middlware";
 import cors from "cors";
@@ -14,21 +14,21 @@ app.use(cors());
 app.post("/api/v1/signup", async (req, res) => {
     // TODO: zod validation , hash the password
     const { email, password, username } = req.body;
-    const userData = { email, password , username };
-    
+    const userData = { email, password, username };
+
     console.log(req.body)
 
     try {
         await UserModel.create(userData);
         res.status(201).json({ message: "User created successfully" });
-    } catch (error:any) {
+    } catch (error: any) {
         if (error.name === "ValidationError") {
             res.status(400).json({ message: "Invalid data provided", details: error.errors });
         } else {
             throw error; // Rethrow non-validation errors
         }
-    }  
-    
+    }
+
 })
 
 app.post("/api/v1/signin", async (req, res) => {
@@ -45,7 +45,7 @@ app.post("/api/v1/signin", async (req, res) => {
         }, JWT_PASSWORD)
 
         res.json({
-            token
+            token, success: true, email, password
         })
     } else {
         res.status(403).json({
@@ -68,15 +68,16 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
     res.json({
         message: "Content added"
     })
-    
+
 })
 
 app.get("/api/v1/content", userMiddleware, async (req, res) => {
     // @ts-ignore
     const userId = req.userId;
+    console.log(userId);
     const content = await ContentModel.find({
         userId: userId
-    }).populate("userId", "email")
+    }).populate("userId")
     res.json({
         content
     })
@@ -91,32 +92,32 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
     })
 
     res.json({
-        message: "Deleted"
+        message: "Deleted "
     })
 })
 
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
     const share = req.body.share;
     if (share) {
-            const existingLink = await LinkModel.findOne({
-                userId: req.userId
-            });
+        const existingLink = await LinkModel.findOne({
+            userId: req.userId
+        });
 
-            if (existingLink) {
-                res.json({
-                    hash: existingLink.hash
-                })
-                return;
-            }
-            const hash = random(10);
-            await LinkModel.create({
-                userId: req.userId,
-                hash: hash
-            })
-
+        if (existingLink) {
             res.json({
-                hash
+                hash: existingLink.hash
             })
+            return;
+        }
+        const hash = random(10);
+        await LinkModel.create({
+            userId: req.userId,
+            hash: hash
+        })
+
+        res.json({
+            hash
+        })
     } else {
         await LinkModel.deleteOne({
             userId: req.userId
@@ -166,7 +167,7 @@ app.get("/api/v1/brain/:shareLink", async (req, res) => {
 })
 app.get('/', (req, res) => {
     res.send('Hello World!')
-  })
+})
 
 connectDB().then(() => {
     app.listen(4000, () => {

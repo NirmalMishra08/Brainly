@@ -10,10 +10,13 @@ import TagIcon from "../icons/TagIcon";
 import LinkIcon from "../icons/LinkIcon";
 import TextIcon from "../icons/TextIcon";
 import VideoIcon from "../icons/VideoIcon";
+import useContent from "../Hooks/useContent";
 
 
 export default function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
+    const {contents} = useContent();
+    console.log("Hello baat"+JSON.stringify(contents));
 
     return (
         <div className="flex h-screen">
@@ -60,12 +63,9 @@ export default function Dashboard() {
 
                 {/* Cards Section with Vertical Scrolling */}
                 <div className="flex flex-wrap gap-4 overflow-y-auto h-full pr-4">
-                    <Card type="twitter" link="https://x.com/91_79Wankhede_/status/1866781851282706547" title="First Tweet" />
-                    <Card type="youtube" link="https://www.youtube.com/watch?v=YJdmAhKuHAw" title="First Video" />
-                    <Card type="youtube" link="https://www.youtube.com/watch?v=YJdmAhKuHAw" title="Second Video" />
-                    <Card type="youtube" link="https://www.youtube.com/watch?v=YJdmAhKuHAw" title="Third Video" />
-                    <Card type="youtube" link="https://www.youtube.com/watch?v=YJdmAhKuHAw" title="Fourth Video" />
-                    <Card type="youtube" link="https://www.youtube.com/watch?v=YJdmAhKuHAw" title="Fifth Video" />
+                    {Array.isArray(contents) && contents.map(({type,link,title})=> <Card type={type} link={link} title={title} />)}
+                   
+                   
                 </div>
             </div>
         </div>

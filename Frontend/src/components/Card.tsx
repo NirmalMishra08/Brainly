@@ -9,7 +9,7 @@ interface CardProps {
   type: "twitter" | "youtube"
 
 }
-const Card = ({ title, link, type }) => {
+const Card = ({ title, link, type }:CardProps) => {
   return (
     <div className="font-medium mx-3">
       <div className="p-4 bg-white rounded-lg border-gray-300 shadow-md max-w-72 border-[1px] flex flex-col gap-4 min-h-48 ">
