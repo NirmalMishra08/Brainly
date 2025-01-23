@@ -11,12 +11,38 @@ import LinkIcon from "../icons/LinkIcon";
 import TextIcon from "../icons/TextIcon";
 import VideoIcon from "../icons/VideoIcon";
 import useContent from "../Hooks/useContent";
+import axios from "axios";
 
 
 export default function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
     const {contents} = useContent();
     console.log("Hello baat"+JSON.stringify(contents));
+
+    const LogoutHandler =async () =>{
+        try {
+            const res = await axios.post(
+                "http://localhost:4000/api/v1/logout",
+                {}, // Empty request body
+                {
+                    headers: {
+                        Authorization: localStorage.getItem("token"),
+                    },
+                }
+            );
+              if(res.data.success){
+                window.localStorage.removeItem('token')
+                  const user = localStorage.getItem("Users");
+                console.log(user)
+                window.localStorage.removeItem('Users')
+              
+                
+                window.location.href = '/'
+              }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="flex h-screen">
@@ -58,7 +84,15 @@ export default function Dashboard() {
                             text="Add Content"
                             startIcon={<Plusicons />}
                         />
+                         <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() =>LogoutHandler()}
+                            text="Logout"
+                            startIcon={<Plusicons />}
+                        />
                     </div>
+                    
                 </div>
 
                 {/* Cards Section with Vertical Scrolling */}

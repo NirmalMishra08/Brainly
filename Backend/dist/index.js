@@ -62,6 +62,22 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 }));
+// @ts-ignore
+app.post("/api/v1/logout", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    try {
+        if (userId) {
+            res.cookie("token", "", { httpOnly: true, maxAge: 0 });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    }
+    catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}));
 app.post("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const link = req.body.link;
     const type = req.body.type;

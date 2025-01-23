@@ -53,6 +53,23 @@ app.post("/api/v1/signin", async (req, res) => {
         })
     }
 })
+// @ts-ignore
+app.post("/api/v1/logout", userMiddleware, async (req, res) => {
+    const userId = req.userId;
+    try {
+        if (userId) {
+            res.cookie("token", "", { httpOnly: true, maxAge: 0 });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    } catch (error) {
+        return res.status(400).json({ message: (error as Error).message })
+    }
+
+
+})
 
 app.post("/api/v1/content", userMiddleware, async (req, res) => {
     const link = req.body.link;
@@ -98,6 +115,7 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
 
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
     const share = req.body.share;
+
     if (share) {
         const existingLink = await LinkModel.findOne({
             userId: req.userId
