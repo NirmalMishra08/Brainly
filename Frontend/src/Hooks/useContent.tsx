@@ -5,6 +5,7 @@ type Content = {
   type: string;
   link: string;
   title: string;
+  _id:string
 };
 
 const useContent = () => {

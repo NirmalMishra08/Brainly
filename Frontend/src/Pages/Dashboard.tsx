@@ -17,7 +17,35 @@ import axios from "axios";
 export default function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
     const {contents} = useContent();
+    console.log(contents)
     console.log("Hello baat"+JSON.stringify(contents));
+
+
+    const onDelete=async(id:any) =>{
+        try {
+            console.log(id)
+            if (!id) {
+                console.error("Content ID is missing");
+                return;
+            }
+
+
+          const res = await axios.delete(`http://localhost:4000/api/v1/content/${id}`,{
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+           
+          })
+
+          console.log(res.data)
+          if(res.data.message="Deleted"){
+            window.location.reload();
+          }
+        console.log("Hello world"+ id)
+        } catch (error) {
+            console.log(((error) as Error).message)
+        }
+    }
 
     const LogoutHandler =async () =>{
         try {
@@ -97,7 +125,7 @@ export default function Dashboard() {
 
                 {/* Cards Section with Vertical Scrolling */}
                 <div className="flex flex-wrap gap-4 overflow-y-auto h-full pr-4">
-                    {Array.isArray(contents) && contents.map(({type,link,title})=> <Card type={type} link={link} title={title} />)}
+                    {Array.isArray(contents) && contents.map(({_id,type,link,title})=> <Card key={_id} onDelete={()=>onDelete(_id)} type={type} link={link} title={title} />)}
                    
                    
                 </div>

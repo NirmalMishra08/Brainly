@@ -30,7 +30,9 @@ export function CreateContentModal({ open, onClose }: {
           "Authorization": localStorage.getItem("token"),
         },
       })
-      console.log(res.data.message)
+      alert(res.data.message)
+      onClose();
+      window.location.reload();
 
       
     } catch (error) {

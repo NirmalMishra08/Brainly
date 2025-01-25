@@ -103,15 +103,22 @@ app.get("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaiter(v
         content
     });
 }));
-app.delete("/api/v1/content", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const contentId = req.body.contentId;
-    yield user_model_1.ContentModel.deleteMany({
-        contentId,
-        userId: req.userId
-    });
-    res.json({
-        message: "Deleted "
-    });
+app.delete(`/api/v1/content/:id`, middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const contentId = req.params.id;
+    if (contentId) {
+        yield user_model_1.ContentModel.deleteOne({
+            _id: contentId,
+            userId: req.userId
+        });
+        res.json({
+            message: "Deleted "
+        });
+    }
+    else {
+        res.status(404).json({
+            message: "Content not found"
+        });
+    }
 }));
 app.post("/api/v1/brain/share", middlware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;

@@ -6,10 +6,12 @@ import { Button } from "./ui/Button"
 interface CardProps {
   title: string,
   link: string,
-  type: "twitter" | "youtube"
+  type: "twitter" | "youtube",
+  onDelete:()=>void,
+  onClick:()=>void
 
 }
-const Card = ({ title, link, type }:CardProps) => {
+const Card = ({ title, link, type ,onDelete ,onClick }:CardProps) => {
   return (
     <div className="font-medium mx-3">
       <div className="p-4 bg-white rounded-lg border-gray-300 shadow-md max-w-72 border-[1px] flex flex-col gap-4 min-h-48 ">
@@ -27,8 +29,10 @@ const Card = ({ title, link, type }:CardProps) => {
               </a>
 
             </div>
-
-            <DeleteIcon />
+<div onClick={()=>onDelete()}>
+<DeleteIcon />
+</div>
+         
           </div>
 
         </div>
